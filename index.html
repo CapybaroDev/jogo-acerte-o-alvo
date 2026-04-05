@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html lang="PT-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acerta o alvo</title>
     <style>
-        *{
+        * {
             margin: 0;
             box-sizing: border-box;
             font-family: sans-serif;
         }
 
-        h1{
+        h1 {
             position: absolute;
             top: 10px;
             left: 10px;
             color: white;
         }
 
-        button.errou{
+        button.errou {
             background-color: black;
             width: 100vw;
             height: 100vh;
@@ -26,7 +27,7 @@
             justify-content: center;
         }
 
-        button.acertou{
+        button.acertou {
             background-color: red;
             width: 50px;
             height: 50px;
@@ -41,7 +42,7 @@
             cursor: pointer;
         }
 
-        div.branca{
+        div.branca {
             background-color: white;
             width: 30px;
             height: 30px;
@@ -51,23 +52,33 @@
             justify-content: center;
         }
 
-        div.vermeilha{
+        div.vermeilha {
             background-color: red;
             width: 10px;
             height: 10px;
             border-radius: 10px;
         }
 
-        button{
+        button {
             border: none;
         }
 
+        div.distrator {
+            background-color: red;
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            cursor: pointer;
+            position: absolute;
+        }
     </style>
 </head>
+
 <body>
     <h1>pontuação: <strong id="pts">0</strong></h1>
-    <button class="errou" onclick="errou()">
-        <h2 style="margin-top: 30vh; color: gray; ">Regras: clique no alvo e marque pontos</h2>
+    <button class="errou" onclick="errou()" id="errou">
+        <h2 style="margin-top: 30vh; color: gray; ">Regras: clique no alvo e marque pontos <br>A cada 200 pontos
+            aparecerão alvos distratores, de cor vermelha, que são falsos <br> com o máximo de distratores sendo 10</h2>
     </button>
     <button class="acertou" onclick="acertou()">
         <div class="branca">
@@ -76,7 +87,10 @@
         </div>
     </button>
     <script>
-        function errou(){
+        let qtdistratores = 0
+
+        function errou() {
+            const distratores = document.querySelectorAll(".distrator")
             let pontuacao = document.getElementById("pts").innerText
             pontuacao = parseInt(pontuacao)
             const alvo = document.querySelector(".acertou")
@@ -86,8 +100,13 @@
             document.getElementById("pts").innerText = "0"
             alvo.style.left = 50 + "vw"
             alvo.style.top = 50 + "vh"
+
+            distratores.forEach(d => {
+                d.remove()
+            })
         }
-        function acertou(){
+
+        function acertou() {
             let pontuacao = document.getElementById("pts").innerText
             pontuacao = parseInt(pontuacao)
 
@@ -102,7 +121,39 @@
 
             alvo.style.left = x + "px"
             alvo.style.top = y + "px"
+
+            if (pontuacao % 200 === 0 && qtdistratores < 10) {
+                criarFalso()
+                qtdistratores += 1
+            }
+
+            if (qtdistratores > 0) {
+                const distratores = document.querySelectorAll(".distrator")
+
+                distratores.forEach(d => {
+                    const x = Math.random() * (window.innerWidth - 50)
+                    const y = Math.random() * (window.innerHeight - 50)
+
+                    d.style.left = x + "px"
+                    d.style.top = y + "px"
+                })
+            }
+        }
+
+        function criarFalso() {
+            const distrator = document.createElement("div")
+            const tela = document.getElementById("errou")
+            distrator.classList.add("distrator")
+
+            const y = Math.random() * (window.innerHeight - 100)
+            const x = Math.random() * (window.innerWidth - 100)
+
+            distrator.style.top = y + "px"
+            distrator.style.left = x + "px"
+
+            tela.appendChild(distrator)
         }
     </script>
 </body>
+
 </html>
