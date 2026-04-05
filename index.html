@@ -79,25 +79,13 @@
         function errou(){
             let pontuacao = document.getElementById("pts").innerText
             pontuacao = parseInt(pontuacao)
-            if (pontuacao == 0){
-                console.log("nada acontece")
-                const alvo = document.querySelector(".acertou")
-                const x = Math.random() * (window.innerWidth - 100)
-                const y = Math.random() * (window.innerHeight - 100)
+            const alvo = document.querySelector(".acertou")
 
-                alvo.style.left = x + "px"
-                alvo.style.top = y + "px"
-            }
-            else if (pontuacao > 0){
-                pontuacao -= 10
-                document.getElementById("pts").innerText = pontuacao
-                const alvo = document.querySelector(".acertou")
-                const x = Math.floor(Math.random() * (window.innerWidth - 50))
-                const y = Math.floor(Math.random() * (window.innerHeight - 50))
+            alert("Você errou, sua pontuação foi " + pontuacao)
 
-                alvo.style.left = x + "px"
-                alvo.style.top = y + "px"
-            }
+            document.getElementById("pts").innerText = "0"
+            alvo.style.left = 50 + "vw"
+            alvo.style.top = 50 + "vh"
         }
         function acertou(){
             let pontuacao = document.getElementById("pts").innerText
