@@ -66,6 +66,13 @@
             border-radius: 10px;
         }
 
+        div.preta{
+            background-color: black;
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+        }
+
         button {
             border: none;
         }
@@ -93,7 +100,7 @@
     </button>
     <button class="acertou" onclick="acertou()">
         <div class="branca">
-            <div class="vermeilha">
+            <div class="preta">
             </div>
         </div>
     </button>
@@ -170,9 +177,11 @@
         function criarFalso() {
             const distrator = document.createElement("div")
             const brancodis = document.createElement("div")
+            const verdis = document.createElement("div")
             const tela = document.getElementById("errou")
             distrator.classList.add("distrator")
             brancodis.classList.add("branca")
+            verdis.classList.add("vermeilha")
 
             const y = Math.random() * (window.innerHeight - 100)
             const x = Math.random() * (window.innerWidth - 100)
@@ -180,6 +189,7 @@
             distrator.style.top = y + "px"
             distrator.style.left = x + "px"
 
+            brancodis.appendChild(verdis)
             distrator.appendChild(brancodis)
             tela.appendChild(distrator)
         }
