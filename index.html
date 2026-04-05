@@ -12,9 +12,16 @@
             font-family: sans-serif;
         }
 
-        h1 {
+        h1.pts {
             position: absolute;
             top: 10px;
+            left: 10px;
+            color: white;
+        }
+
+        h1.tempo {
+            position: absolute;
+            top: 50px;
             left: 10px;
             color: white;
         }
@@ -70,15 +77,19 @@
             border-radius: 50px;
             cursor: pointer;
             position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
 
 <body>
-    <h1>pontuação: <strong id="pts">0</strong></h1>
+    <h1 class="pts">pontuação: <strong id="pts">0</strong></h1>
+    <h1 class="tempo">tempo: <strong id="tempo">10</strong>s</h1>
     <button class="errou" onclick="errou()" id="errou">
-        <h2 style="margin-top: 30vh; color: gray; ">Regras: clique no alvo e marque pontos <br>A cada 200 pontos
-            aparecerão alvos distratores, de cor vermelha, que são falsos <br> com o máximo de distratores sendo 10</h2>
+        <h2 style="margin-top: 30vh; color: gray; ">Clique na tela e marque pontos <br>A cada 200 pontos aparecerão
+            alvos falsos <br> o tempo para acertar o alvo diminui de acordo com os pontos</h2>
     </button>
     <button class="acertou" onclick="acertou()">
         <div class="branca">
@@ -88,6 +99,10 @@
     </button>
     <script>
         let qtdistratores = 0
+        let tempo = 10
+        let timer = null
+        let intervalo = null
+        let tempoAtual = tempo
 
         function errou() {
             const distratores = document.querySelectorAll(".distrator")
@@ -95,7 +110,7 @@
             pontuacao = parseInt(pontuacao)
             const alvo = document.querySelector(".acertou")
 
-            alert("Você errou, sua pontuação foi " + pontuacao)
+            alert("Você perdeu, sua pontuação foi " + pontuacao)
 
             document.getElementById("pts").innerText = "0"
             alvo.style.left = 50 + "vw"
@@ -106,6 +121,11 @@
             })
 
             qtdistratores = 0
+
+            clearInterval(intervalo)
+            tempo = 10
+
+            document.getElementById("tempo").innerText = tempo
         }
 
         function acertou() {
@@ -127,6 +147,9 @@
             if (pontuacao % 200 === 0 && qtdistratores < 10) {
                 criarFalso()
                 qtdistratores += 1
+                if (tempo > 3) {
+                    tempo -= 1
+                }
             }
 
             if (qtdistratores > 0) {
@@ -140,12 +163,16 @@
                     d.style.top = y + "px"
                 })
             }
+
+            iniciarTimer()
         }
 
         function criarFalso() {
             const distrator = document.createElement("div")
+            const brancodis = document.createElement("div")
             const tela = document.getElementById("errou")
             distrator.classList.add("distrator")
+            brancodis.classList.add("branca")
 
             const y = Math.random() * (window.innerHeight - 100)
             const x = Math.random() * (window.innerWidth - 100)
@@ -153,7 +180,27 @@
             distrator.style.top = y + "px"
             distrator.style.left = x + "px"
 
+            distrator.appendChild(brancodis)
             tela.appendChild(distrator)
+        }
+
+        function iniciarTimer() {
+            clearInterval(intervalo)
+
+            tempoAtual = tempo
+            document.getElementById("tempo").innerText = tempoAtual
+
+            intervalo = setInterval(() => {
+                tempoAtual--
+
+                document.getElementById("tempo").innerText = tempoAtual
+
+                if (tempoAtual < 0) {
+                    clearInterval(intervalo)
+                    errou()
+                }
+
+            }, 1000)
         }
     </script>
 </body>
